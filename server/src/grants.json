@@ -1,90 +1,270 @@
 [
   {
-    "role": "user",
+    "role": "admins",
     "resource": "User",
     "action": "read:own",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "User",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "User",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
     "resource": "User",
     "action": "create:any",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "User",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "User",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
     "resource": "User",
     "action": "update:any",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "User",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "User",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
     "resource": "User",
     "action": "delete:any",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "User",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "User",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
     "resource": "User",
     "action": "read:any",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "User",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "User",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
     "resource": "Course",
     "action": "read:own",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "Course",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "Course",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
     "resource": "Course",
     "action": "create:any",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "Course",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "Course",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
     "resource": "Course",
     "action": "update:any",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "Course",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "Course",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
     "resource": "Course",
     "action": "delete:any",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "Course",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "Course",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
     "resource": "Course",
     "action": "read:any",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "Course",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "Course",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
     "resource": "CourseModule",
     "action": "read:own",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "CourseModule",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "CourseModule",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
     "resource": "CourseModule",
     "action": "create:any",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "CourseModule",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "CourseModule",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
     "resource": "CourseModule",
     "action": "update:any",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "CourseModule",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "CourseModule",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
     "resource": "CourseModule",
     "action": "delete:any",
     "attributes": "*"
   },
   {
-    "role": "user",
+    "role": "managers",
+    "resource": "CourseModule",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
+    "resource": "CourseModule",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admins",
+    "resource": "CourseModule",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "managers",
+    "resource": "CourseModule",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "trainees",
     "resource": "CourseModule",
     "action": "read:any",
     "attributes": "*"

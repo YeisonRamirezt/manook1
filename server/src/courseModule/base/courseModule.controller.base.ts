@@ -20,6 +20,8 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { CourseModuleService } from "../courseModule.service";
 import { CourseModuleCreateInput } from "./CourseModuleCreateInput";
 import { CourseModuleWhereInput } from "./CourseModuleWhereInput";
@@ -35,6 +37,7 @@ export class CourseModuleControllerBase {
   ) {}
 
   @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.UseGuards(
     defaultAuthGuard.DefaultAuthGuard,
     nestAccessControl.ACGuard
@@ -48,27 +51,8 @@ export class CourseModuleControllerBase {
   @swagger.ApiCreatedResponse({ type: CourseModule })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async create(
-    @common.Body() data: CourseModuleCreateInput,
-    @nestAccessControl.UserRoles() userRoles: string[]
+    @common.Body() data: CourseModuleCreateInput
   ): Promise<CourseModule> {
-    const permission = this.rolesBuilder.permission({
-      role: userRoles,
-      action: "create",
-      possession: "any",
-      resource: "CourseModule",
-    });
-    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
-    if (invalidAttributes.length) {
-      const properties = invalidAttributes
-        .map((attribute: string) => JSON.stringify(attribute))
-        .join(", ");
-      const roles = userRoles
-        .map((role: string) => JSON.stringify(role))
-        .join(",");
-      throw new errors.ForbiddenException(
-        `providing the properties: ${properties} on ${"CourseModule"} creation is forbidden for roles: ${roles}`
-      );
-    }
     return await this.service.create({
       data: data,
       select: {
@@ -85,6 +69,7 @@ export class CourseModuleControllerBase {
   }
 
   @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.UseGuards(
     defaultAuthGuard.DefaultAuthGuard,
     nestAccessControl.ACGuard
@@ -98,19 +83,9 @@ export class CourseModuleControllerBase {
   @swagger.ApiOkResponse({ type: [CourseModule] })
   @swagger.ApiForbiddenResponse()
   @ApiNestedQuery(CourseModuleFindManyArgs)
-  async findMany(
-    @common.Req() request: Request,
-    @nestAccessControl.UserRoles() userRoles: string[]
-  ): Promise<CourseModule[]> {
+  async findMany(@common.Req() request: Request): Promise<CourseModule[]> {
     const args = plainToClass(CourseModuleFindManyArgs, request.query);
-
-    const permission = this.rolesBuilder.permission({
-      role: userRoles,
-      action: "read",
-      possession: "any",
-      resource: "CourseModule",
-    });
-    const results = await this.service.findMany({
+    return this.service.findMany({
       ...args,
       select: {
         content: true,
@@ -123,10 +98,10 @@ export class CourseModuleControllerBase {
         updatedAt: true,
       },
     });
-    return results.map((result) => permission.filter(result));
   }
 
   @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.UseGuards(
     defaultAuthGuard.DefaultAuthGuard,
     nestAccessControl.ACGuard
@@ -141,15 +116,8 @@ export class CourseModuleControllerBase {
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async findOne(
-    @common.Param() params: CourseModuleWhereUniqueInput,
-    @nestAccessControl.UserRoles() userRoles: string[]
+    @common.Param() params: CourseModuleWhereUniqueInput
   ): Promise<CourseModule | null> {
-    const permission = this.rolesBuilder.permission({
-      role: userRoles,
-      action: "read",
-      possession: "own",
-      resource: "CourseModule",
-    });
     const result = await this.service.findOne({
       where: params,
       select: {
@@ -168,10 +136,11 @@ export class CourseModuleControllerBase {
         `No resource was found for ${JSON.stringify(params)}`
       );
     }
-    return permission.filter(result);
+    return result;
   }
 
   @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.UseGuards(
     defaultAuthGuard.DefaultAuthGuard,
     nestAccessControl.ACGuard
@@ -187,28 +156,8 @@ export class CourseModuleControllerBase {
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async update(
     @common.Param() params: CourseModuleWhereUniqueInput,
-    @common.Body()
-    data: CourseModuleUpdateInput,
-    @nestAccessControl.UserRoles() userRoles: string[]
+    @common.Body() data: CourseModuleUpdateInput
   ): Promise<CourseModule | null> {
-    const permission = this.rolesBuilder.permission({
-      role: userRoles,
-      action: "update",
-      possession: "any",
-      resource: "CourseModule",
-    });
-    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
-    if (invalidAttributes.length) {
-      const properties = invalidAttributes
-        .map((attribute: string) => JSON.stringify(attribute))
-        .join(", ");
-      const roles = userRoles
-        .map((role: string) => JSON.stringify(role))
-        .join(",");
-      throw new errors.ForbiddenException(
-        `providing the properties: ${properties} on ${"CourseModule"} update is forbidden for roles: ${roles}`
-      );
-    }
     try {
       return await this.service.update({
         where: params,
