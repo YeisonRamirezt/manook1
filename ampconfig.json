@@ -1,9 +1,9 @@
 {
-  "dataServiceGeneratorVersion": "0.12.3",
+  "dataServiceGeneratorVersion": "0.12.6",
   "appInfo": {
-    "name": "My app-1",
-    "description": "",
-    "version": "vjxg0f5l",
+    "name": "Manook",
+    "description": "Manook is an interactive playbook for sales managers, allowing them conveniently track all important elements of their team.",
+    "version": "arpz1boa",
     "id": "cl1qie6b27475801s69qjpl1bm",
     "url": "https://app.amplication.com/cl1qie6b27475801s69qjpl1bm",
     "settings": {

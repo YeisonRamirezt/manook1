@@ -19,6 +19,8 @@ import * as gqlUserRoles from "../../auth/gqlUserRoles.decorator";
 import * as abacUtil from "../../auth/abac.util";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { CreateCourseArgs } from "./CreateCourseArgs";
 import { UpdateCourseArgs } from "./UpdateCourseArgs";
 import { DeleteCourseArgs } from "./DeleteCourseArgs";
@@ -54,26 +56,18 @@ export class CourseResolverBase {
     };
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => [Course])
   @nestAccessControl.UseRoles({
     resource: "Course",
     action: "read",
     possession: "any",
   })
-  async courses(
-    @graphql.Args() args: CourseFindManyArgs,
-    @gqlUserRoles.UserRoles() userRoles: string[]
-  ): Promise<Course[]> {
-    const permission = this.rolesBuilder.permission({
-      role: userRoles,
-      action: "read",
-      possession: "any",
-      resource: "Course",
-    });
-    const results = await this.service.findMany(args);
-    return results.map((result) => permission.filter(result));
+  async courses(@graphql.Args() args: CourseFindManyArgs): Promise<Course[]> {
+    return this.service.findMany(args);
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => Course, { nullable: true })
   @nestAccessControl.UseRoles({
     resource: "Course",
@@ -81,53 +75,23 @@ export class CourseResolverBase {
     possession: "own",
   })
   async course(
-    @graphql.Args() args: CourseFindUniqueArgs,
-    @gqlUserRoles.UserRoles() userRoles: string[]
+    @graphql.Args() args: CourseFindUniqueArgs
   ): Promise<Course | null> {
-    const permission = this.rolesBuilder.permission({
-      role: userRoles,
-      action: "read",
-      possession: "own",
-      resource: "Course",
-    });
     const result = await this.service.findOne(args);
     if (result === null) {
       return null;
     }
-    return permission.filter(result);
+    return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @graphql.Mutation(() => Course)
   @nestAccessControl.UseRoles({
     resource: "Course",
     action: "create",
     possession: "any",
   })
-  async createCourse(
-    @graphql.Args() args: CreateCourseArgs,
-    @gqlUserRoles.UserRoles() userRoles: string[]
-  ): Promise<Course> {
-    const permission = this.rolesBuilder.permission({
-      role: userRoles,
-      action: "create",
-      possession: "any",
-      resource: "Course",
-    });
-    const invalidAttributes = abacUtil.getInvalidAttributes(
-      permission,
-      args.data
-    );
-    if (invalidAttributes.length) {
-      const properties = invalidAttributes
-        .map((attribute: string) => JSON.stringify(attribute))
-        .join(", ");
-      const roles = userRoles
-        .map((role: string) => JSON.stringify(role))
-        .join(",");
-      throw new apollo.ApolloError(
-        `providing the properties: ${properties} on ${"Course"} creation is forbidden for roles: ${roles}`
-      );
-    }
+  async createCourse(@graphql.Args() args: CreateCourseArgs): Promise<Course> {
     // @ts-ignore
     return await this.service.create({
       ...args,
@@ -135,6 +99,7 @@ export class CourseResolverBase {
     });
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @graphql.Mutation(() => Course)
   @nestAccessControl.UseRoles({
     resource: "Course",
@@ -145,27 +110,6 @@ export class CourseResolverBase {
     @graphql.Args() args: UpdateCourseArgs,
     @gqlUserRoles.UserRoles() userRoles: string[]
   ): Promise<Course | null> {
-    const permission = this.rolesBuilder.permission({
-      role: userRoles,
-      action: "update",
-      possession: "any",
-      resource: "Course",
-    });
-    const invalidAttributes = abacUtil.getInvalidAttributes(
-      permission,
-      args.data
-    );
-    if (invalidAttributes.length) {
-      const properties = invalidAttributes
-        .map((attribute: string) => JSON.stringify(attribute))
-        .join(", ");
-      const roles = userRoles
-        .map((role: string) => JSON.stringify(role))
-        .join(",");
-      throw new apollo.ApolloError(
-        `providing the properties: ${properties} on ${"Course"} update is forbidden for roles: ${roles}`
-      );
-    }
     try {
       // @ts-ignore
       return await this.service.update({
